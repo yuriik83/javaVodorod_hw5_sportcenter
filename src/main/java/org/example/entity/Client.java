@@ -1,6 +1,9 @@
 package org.example.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.Session;
+import util.HibernateUtil;
+
 import java.time.LocalDate;
 
 @Entity
@@ -30,6 +33,12 @@ public class Client {
 
     public Client() {}
 
+    public Client findClientById(Long id) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(Client.class, id);
+        }
+    }
+
     public Client(String firstName, String lastName, int age, String phoneNumber,
                   LocalDate lastVisitDate, Status status, double totalSpent) {
         this.firstName = firstName;
@@ -41,9 +50,25 @@ public class Client {
         this.totalSpent = totalSpent;
     }
 
+    public Client(String firstName, String lastName, int age) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+    }
+
     public Long getId() { return id; }
     public String getFirstName() { return firstName; }
     public String getLastName() { return lastName; }
     public Status getStatus() { return status; }
     public void setStatus(Status status) { this.status = status; }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                '}';
+    }
 }

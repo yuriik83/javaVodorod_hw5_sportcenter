@@ -1,34 +1,53 @@
 package org.example;
 
 import org.example.entity.Client;
+import org.example.entity.Room;
+import org.example.entity.RoomStatus;
+import org.example.entity.Service;
 import org.example.service.ClientService;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import util.HibernateUtil;
 
 import java.time.LocalDate;
 
 public class Main {
     public static void main(String[] args) {
-        ClientService service = new ClientService();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
 
-        service.addClient(new Client("Ivan", "Ivanov", 30, "123456789", LocalDate.now(), Client.Status.ACTIVE, 100.0));
-        service.addClient(new Client("Petr", "Petrov", 25, "987111222", LocalDate.now(), Client.Status.PREMIUM, 200.0));
-        service.addClient(new Client("Sergey", "Sidorov", 28, "111222333", LocalDate.now(), Client.Status.ACTIVE, 150.0));
-        service.addClient(new Client("Olga", "Smirnova", 32, "444555666", LocalDate.now(), Client.Status.BLOCKED, 50.0));
-        service.addClient(new Client("Sergey", "Kuznetsov", 40, "777888999", LocalDate.now(), Client.Status.PREMIUM, 500.0));
+            // Добавление клиента
+            Client client = new Client("Иван", "Иванов", 25);
+            session.persist(client);
+            System.out.println("Добавлен клиент: " + client);
 
-        System.out.println("All clients:");
-        for (Client c : service.getAllClients()) {
-            System.out.println(c.getId() + " - " + c.getFirstName() + " " + c.getLastName() + " (" + c.getStatus() + ")");
-        }
+            // Поиск клиента по id
+            Client found = session.get(Client.class, client.getId());
+            System.out.println("Найден клиент: " + found);
 
-        System.out.println("\nUpdating client status:");
-        service.updateClientStatus(1L, Client.Status.BLOCKED);
+            // Добавление услуги
+            Service service = new Service("Теннис", 100.0);
+            session.persist(service);
+            System.out.println("Добавлена услуга: " + service);
 
-        System.out.println("\nDeleting client:");
-        service.deleteClient(2L);
+            // Добавление помещения
+            Room room = new Room("Тренажёрный зал", "R001", 30, RoomStatus.ACTIVE, 500.0);
+            session.persist(room);
+            System.out.println("Добавлено помещение: " + room);
 
-        System.out.println("\nAll clients after update:");
-        for (Client c : service.getAllClients()) {
-            System.out.println(c.getId() + " - " + c.getFirstName() + " " + c.getLastName() + " (" + c.getStatus() + ")");
+            // Отсоединение помещения
+            session.detach(room);
+            room.setIdentifier("002");
+            session.persist(room);
+            System.out.println("Добавлено помещение через detach: " + room);
+
+            // Смена аренды
+            Room updateRoom = session.get(Room.class, room.getId());
+            updateRoom.setRentPrice(150.0);
+            session.merge(updateRoom);
+            System.out.println("Обновлена стоимость аренды: " + updateRoom);
+
+            tx.commit();
         }
     }
 }
