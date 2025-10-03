@@ -1,53 +1,73 @@
 package org.example;
 
-import org.example.entity.Client;
-import org.example.entity.Room;
-import org.example.entity.RoomStatus;
-import org.example.entity.Service;
-import org.example.service.ClientService;
+import org.example.entity.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import util.HibernateUtil;
 
-import java.time.LocalDate;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
 
-            // Добавление клиента
-            Client client = new Client("Иван", "Иванов", 25);
-            session.persist(client);
-            System.out.println("Добавлен клиент: " + client);
+            Client client1 = new Client();
+            client1.setName("Ivan");
+            client1.setPremium(true);
+            Address address = new Address();
+            address.setCity("Minsk");
+            address.setStreet("Brylya");
+            address.setHouseNumber("10");
+            address.setPostalCode("220000");
+            client1.setAddress(address);
 
-            // Поиск клиента по id
-            Client found = session.get(Client.class, client.getId());
-            System.out.println("Найден клиент: " + found);
+            Client client2 = new Client();
+            client2.setName("Andrey");
+            client2.setPremium(false);
+            Address addr2 = new Address();
+            addr2.setCity("Bobryisk");
+            addr2.setStreet("Lenina");
+            addr2.setHouseNumber("1");
+            addr2.setPostalCode("230000");
+            client2.setAddress(addr2);
 
-            // Добавление услуги
-            Service service = new Service("Теннис", 100.0);
-            session.persist(service);
-            System.out.println("Добавлена услуга: " + service);
+            session.persist(client1);
+            session.persist(client2);
 
-            // Добавление помещения
-            Room room = new Room("Тренажёрный зал", "R001", 30, RoomStatus.ACTIVE, 500.0);
-            session.persist(room);
-            System.out.println("Добавлено помещение: " + room);
+            Room room1 = new Room();
+            room1.setName("Бассейн");
+            room1.setCapacity(4);
+            room1.setPricePerHour(50);
 
-            // Отсоединение помещения
-            session.detach(room);
-            room.setIdentifier("002");
-            session.persist(room);
-            System.out.println("Добавлено помещение через detach: " + room);
+            Room room2 = new Room();
+            room2.setName("Теннис");
+            room2.setCapacity(22);
+            room2.setPricePerHour(120);
 
-            // Смена аренды
-            Room updateRoom = session.get(Room.class, room.getId());
-            updateRoom.setRentPrice(150.0);
-            session.merge(updateRoom);
-            System.out.println("Обновлена стоимость аренды: " + updateRoom);
+            Room room3 = new Room();
+            room3.setName("Тренажерный зал");
+            room3.setCapacity(15);
+            room3.setPricePerHour(70);
+
+            session.persist(room1);
+            session.persist(room2);
+            session.persist(room3);
 
             tx.commit();
+
+            System.out.println("\n Premium Clients");
+            List<PremiumClient> premiumClients = session.createQuery("from PremiumClient", PremiumClient.class).list();
+            for (PremiumClient client : premiumClients) {
+                System.out.printf("ID: %d, Name: %s%n", client.getId(), client.getFirstName());
+            }
+
+            System.out.println("\n Small Rooms");
+            List<SmallRoom> smallRooms = session.createQuery("from SmallRoom", SmallRoom.class).list();
+            for (SmallRoom smallRoom : smallRooms) {
+                System.out.printf("ID: %d, Name: %s, Capacity: %d, Price: %.2f%n",
+                        smallRoom.getId(), smallRoom.getName(), smallRoom.getCapacity(), smallRoom.getPriceByHour());
+            }
         }
     }
 }

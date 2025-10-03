@@ -20,6 +20,11 @@ public class Client {
     private String phoneNumber;
     private LocalDate lastVisitDate;
 
+    private boolean premium;
+
+    @Embedded
+    private Address address;
+
     @Enumerated(EnumType.STRING)
     private Status status;
 
@@ -70,5 +75,28 @@ public class Client {
                 ", lastName='" + lastName + '\'' +
                 ", age=" + age +
                 '}';
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public boolean isPremium() {
+        return premium;
+    }
+    public void setPremium(boolean premium) {
+        this.premium = premium;
     }
 }

@@ -14,6 +14,8 @@ public class Room {
     private String identifier;
     private int capacity;
 
+    private double pricePerHour;
+
     @Enumerated(EnumType.STRING)
     private RoomStatus status;
 
@@ -40,6 +42,13 @@ public class Room {
     public void setStatus(RoomStatus status) { this.status = status; }
     public double getRentPrice() { return rentPrice; }
     public void setRentPrice(double rentPrice) { this.rentPrice = rentPrice; }
+
+    public double getPricePerHour() {
+        return pricePerHour;
+    }
+    public void setPricePerHour(double pricePerHour) {
+        this.pricePerHour = pricePerHour;
+    }
 
     @Override
     public String toString() {
