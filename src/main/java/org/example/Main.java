@@ -1,53 +1,88 @@
 package org.example;
 
-import org.example.entity.Client;
-import org.example.entity.Room;
-import org.example.entity.RoomStatus;
-import org.example.entity.Service;
-import org.example.service.ClientService;
+import org.example.entity.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import util.HibernateUtil;
 
-import java.time.LocalDate;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
 
-            // Добавление клиента
-            Client client = new Client("Иван", "Иванов", 25);
-            session.persist(client);
-            System.out.println("Добавлен клиент: " + client);
+            // Клиенты
+            Address address1 = new Address("Minsk", "Brylya", "10", "220000");
+            Client client1 = new Client();
+            client1.setFirstName("Ivan");
+            client1.setLastName("Ivanov");
+            client1.setPremium(true);
+            client1.setAddress(address1);
 
-            // Поиск клиента по id
-            Client found = session.get(Client.class, client.getId());
-            System.out.println("Найден клиент: " + found);
+            Address address2 = new Address("Bobruisk", "Lenina", "1", "230000");
+            Client client2 = new Client();
+            client2.setFirstName("Andrey");
+            client1.setLastName("Ivanov");
+            client2.setPremium(false);
+            client2.setAddress(address2);
 
-            // Добавление услуги
-            Service service = new Service("Теннис", 100.0);
-            session.persist(service);
-            System.out.println("Добавлена услуга: " + service);
+            session.persist(client1);
+            session.persist(client2);
 
-            // Добавление помещения
-            Room room = new Room("Тренажёрный зал", "R001", 30, RoomStatus.ACTIVE, 500.0);
-            session.persist(room);
-            System.out.println("Добавлено помещение: " + room);
+            // Комнаты
+            Room room1 = new Room(
+                    "Бассейн",
+                    "POOL",
+                    4,
+                    RoomStatus.ACTIVE,
+                    50.0
+            );
 
-            // Отсоединение помещения
-            session.detach(room);
-            room.setIdentifier("002");
-            session.persist(room);
-            System.out.println("Добавлено помещение через detach: " + room);
+            Room room2 = new Room(
+                    "Теннис",
+                    "TENNIS",
+                    22,
+                    RoomStatus.REPAIR,
+                    120.0
+            );
 
-            // Смена аренды
-            Room updateRoom = session.get(Room.class, room.getId());
-            updateRoom.setRentPrice(150.0);
-            session.merge(updateRoom);
-            System.out.println("Обновлена стоимость аренды: " + updateRoom);
+            Room room3 = new Room(
+                    "Тренажёрный зал",
+                    "GYM01",
+                    15,
+                    RoomStatus.ACTIVE,
+                    70.0
+            );
+
+            session.persist(room1);
+            session.persist(room2);
+            session.persist(room3);
 
             tx.commit();
+
+            // Отображение Premium клиентов
+            System.out.println("\nPremium Clients:");
+            List<PremiumClient> premiumClients = session.createQuery("from PremiumClient", PremiumClient.class).list();
+            for (PremiumClient client : premiumClients) {
+                System.out.printf("ID: %d, Name: %s%n", client.getId(), client.getFirstName());
+            }
+
+            // Отображение малых комнат
+            System.out.println("\nSmall Rooms:");
+            List<SmallRoom> smallRooms = session.createQuery("from SmallRoom", SmallRoom.class).list();
+            for (SmallRoom smallRoom : smallRooms) {
+                System.out.printf(
+                        "ID: %d, Name: %s, Capacity: %d, Price: %.2f%n",
+                        smallRoom.getId(),
+                        smallRoom.getName(),
+                        smallRoom.getCapacity(),
+                        smallRoom.getPriceByHour()
+                );
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

@@ -23,6 +23,8 @@ public class Room {
 
     private int capacity;
 
+    private double pricePerHour;
+
     @Enumerated(EnumType.STRING)
     private RoomStatus status;
 
@@ -36,4 +38,3 @@ public class Room {
         this.rentPrice = rentPrice;
     }
 }
-
