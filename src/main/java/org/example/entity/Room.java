@@ -1,17 +1,26 @@
 package org.example.entity;
 
 import jakarta.persistence.*;
-import org.example.entity.RoomStatus;
+import lombok.*;
 
 @Entity
 @Table(name = "rooms")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
 public class Room {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
+
     private String identifier;
+
     private int capacity;
 
     private double pricePerHour;
@@ -21,8 +30,6 @@ public class Room {
 
     private double rentPrice;
 
-    public Room() {}
-
     public Room(String name, String identifier, int capacity, RoomStatus status, double rentPrice) {
         this.name = name;
         this.identifier = identifier;
@@ -30,6 +37,7 @@ public class Room {
         this.status = status;
         this.rentPrice = rentPrice;
     }
+<<<<<<< HEAD
 
     public Long getId() { return id; }
     public String getName() { return name; }
@@ -61,4 +69,7 @@ public class Room {
                 ", rentPrice=" + rentPrice +
                 '}';
     }
+=======
+>>>>>>> feature/homework6
 }
+
