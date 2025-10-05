@@ -1,10 +1,13 @@
 package org.example.entity;
 
-import jakarta.persistence.DiscriminatorValue;
-import org.hibernate.annotations.Where;
 import jakarta.persistence.Entity;
+import lombok.*;
 
 @Entity
-@DiscriminatorValue("PREMIUM")
-@Where(clause = "premium = true")
-public class PremiumClient extends Client {}
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString(callSuper = true)
+@org.hibernate.annotations.Where(clause = "premium = true")
+public class PremiumClient extends Client {
+}

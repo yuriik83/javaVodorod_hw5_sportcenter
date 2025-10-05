@@ -37,39 +37,4 @@ public class Room {
         this.status = status;
         this.rentPrice = rentPrice;
     }
-<<<<<<< HEAD
-
-    public Long getId() { return id; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public String getIdentifier() { return identifier; }
-    public void setIdentifier(String identifier) { this.identifier = identifier; }
-    public int getCapacity() { return capacity; }
-    public void setCapacity(int capacity) { this.capacity = capacity; }
-    public RoomStatus getStatus() { return status; }
-    public void setStatus(RoomStatus status) { this.status = status; }
-    public double getRentPrice() { return rentPrice; }
-    public void setRentPrice(double rentPrice) { this.rentPrice = rentPrice; }
-
-    public double getPricePerHour() {
-        return pricePerHour;
-    }
-    public void setPricePerHour(double pricePerHour) {
-        this.pricePerHour = pricePerHour;
-    }
-
-    @Override
-    public String toString() {
-        return "Room{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", identifier='" + identifier + '\'' +
-                ", capacity=" + capacity +
-                ", status=" + status +
-                ", rentPrice=" + rentPrice +
-                '}';
-    }
-=======
->>>>>>> feature/homework6
 }
-

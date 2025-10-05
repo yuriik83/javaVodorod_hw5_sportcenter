@@ -1,13 +1,18 @@
 package org.example.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.Session;
 import util.HibernateUtil;
-
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "clients")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class Client {
 
     @Id
@@ -19,7 +24,6 @@ public class Client {
     private int age;
     private String phoneNumber;
     private LocalDate lastVisitDate;
-
     private boolean premium;
 
     @Embedded
@@ -36,67 +40,15 @@ public class Client {
         PREMIUM
     }
 
-    public Client() {}
-
-    public Client findClientById(Long id) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.get(Client.class, id);
-        }
-    }
-
-    public Client(String firstName, String lastName, int age, String phoneNumber,
-                  LocalDate lastVisitDate, Status status, double totalSpent) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
-        this.phoneNumber = phoneNumber;
-        this.lastVisitDate = lastVisitDate;
-        this.status = status;
-        this.totalSpent = totalSpent;
-    }
-
     public Client(String firstName, String lastName, int age) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
     }
 
-    public Long getId() { return id; }
-    public String getFirstName() { return firstName; }
-    public String getLastName() { return lastName; }
-    public Status getStatus() { return status; }
-    public void setStatus(Status status) { this.status = status; }
-
-    @Override
-    public String toString() {
-        return "Client{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", age=" + age +
-                '}';
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public boolean isPremium() {
-        return premium;
-    }
-    public void setPremium(boolean premium) {
-        this.premium = premium;
+    public Client findClientById(Long id) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(Client.class, id);
+        }
     }
 }
