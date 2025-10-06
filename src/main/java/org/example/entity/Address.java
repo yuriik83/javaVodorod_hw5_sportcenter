@@ -1,17 +1,20 @@
 package org.example.entity;
 
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 import lombok.*;
 
-@Embeddable
-@Getter
-@Setter
+@Entity
+@Table(name = "addresses")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class Address {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String city;
     private String street;
-    private String houseNumber;
-    private String postalCode;
+    private String house;
+    private String zip;
 }
