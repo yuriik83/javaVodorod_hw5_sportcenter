@@ -3,7 +3,7 @@ package org.example.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Session;
-import util.HibernateUtil;
+import config.HibernateConnection;
 import java.time.LocalDate;
 
 @Entity
@@ -47,7 +47,7 @@ public class Client {
     }
 
     public Client findClientById(Long id) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = HibernateConnection.getSessionFactory().openSession()) {
             return session.get(Client.class, id);
         }
     }

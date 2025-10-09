@@ -1,88 +1,50 @@
 package org.example;
 
 import org.example.entity.*;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import util.HibernateUtil;
+import org.example.service.VisitorService;
+import org.example.service.EmployeeService;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Main {
     public static void main(String[] args) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Transaction tx = session.beginTransaction();
+        VisitorService visitorService = new VisitorService();
+        EmployeeService employeeService = new EmployeeService();
 
-            // Клиенты
-            Address address1 = new Address("Minsk", "Brylya", "10", "220000");
-            Client client1 = new Client();
-            client1.setFirstName("Ivan");
-            client1.setLastName("Ivanov");
-            client1.setPremium(true);
-            client1.setAddress(address1);
+        Address address1 = new Address(null, "Minsk", "Brylya", "10", "220000");
+        Visitor visitor = new Visitor();
+        visitor.setFirstName("Ivan");
+        visitor.setLastName("Ivanov");
+        visitor.setBirthYear(1990);
+        visitor.setAddress(address1);
+        visitor.setStatus(Visitor.Status.VIP);
+        visitor.setFirstVisitDate(LocalDateTime.now().minusMonths(6));
+        visitor.setLastVisitDate(LocalDateTime.now());
+        visitor.setTotalSpent(250.50);
 
-            Address address2 = new Address("Bobruisk", "Lenina", "1", "230000");
-            Client client2 = new Client();
-            client2.setFirstName("Andrey");
-            client1.setLastName("Ivanov");
-            client2.setPremium(false);
-            client2.setAddress(address2);
+        visitorService.registerVisitor(visitor);
 
-            session.persist(client1);
-            session.persist(client2);
+        Address address2 = new Address(null, "Bobruisk", "Lenina", "1", "230000");
+        Employee employee = new Employee();
+        employee.setFirstName("Andrey");
+        employee.setLastName("Petrov");
+        employee.setBirthYear(1985);
+        employee.setAddress(address2);
+        employee.setPosition("Trainer");
+        employee.setHireDate(LocalDate.of(2023, 3, 1));
+        employee.setMonthlySalary(1800.0);
 
-            // Комнаты
-            Room room1 = new Room(
-                    "Бассейн",
-                    "POOL",
-                    4,
-                    RoomStatus.ACTIVE,
-                    50.0
-            );
+        employeeService.registerEmployee(employee);
 
-            Room room2 = new Room(
-                    "Теннис",
-                    "TENNIS",
-                    22,
-                    RoomStatus.REPAIR,
-                    120.0
-            );
+        System.out.println("\nVisitors:");
+        visitorService.getAllVisitors().forEach(v ->
+                System.out.println(v.getFirstName() + " " + v.getStatus())
+        );
 
-            Room room3 = new Room(
-                    "Тренажёрный зал",
-                    "GYM01",
-                    15,
-                    RoomStatus.ACTIVE,
-                    70.0
-            );
-
-            session.persist(room1);
-            session.persist(room2);
-            session.persist(room3);
-
-            tx.commit();
-
-            // Отображение Premium клиентов
-            System.out.println("\nPremium Clients:");
-            List<PremiumClient> premiumClients = session.createQuery("from PremiumClient", PremiumClient.class).list();
-            for (PremiumClient client : premiumClients) {
-                System.out.printf("ID: %d, Name: %s%n", client.getId(), client.getFirstName());
-            }
-
-            // Отображение малых комнат
-            System.out.println("\nSmall Rooms:");
-            List<SmallRoom> smallRooms = session.createQuery("from SmallRoom", SmallRoom.class).list();
-            for (SmallRoom smallRoom : smallRooms) {
-                System.out.printf(
-                        "ID: %d, Name: %s, Capacity: %d, Price: %.2f%n",
-                        smallRoom.getId(),
-                        smallRoom.getName(),
-                        smallRoom.getCapacity(),
-                        smallRoom.getPriceByHour()
-                );
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        System.out.println("\nEmployees:");
+        employeeService.getAllEmployees().forEach(e ->
+                System.out.println(e.getFirstName() + " - " + e.getPosition())
+        );
     }
 }
