@@ -5,22 +5,24 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.time.LocalDate;
 
 @Entity
-@Table(name = "services")
+@Table(name = "visits")
 @Getter
 @Setter
-public class Service {
+public class Visit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private LocalDate visitDate;
 
-    private BigDecimal price;
+    private BigDecimal spentAmount;
 
-    @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Room> rooms;
+    @ManyToOne
+    @JoinColumn(name = "visitor_id")
+    private Visitor visitor;
 }
+

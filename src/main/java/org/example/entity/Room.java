@@ -3,6 +3,8 @@ package org.example.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "rooms")
 @Getter
@@ -27,6 +29,9 @@ public class Room {
 
     @Enumerated(EnumType.STRING)
     private RoomStatus status;
+
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Record> records;
 
     private double rentPrice;
 

@@ -5,7 +5,7 @@
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/sportcenter</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/sport_center</property>
         <property name="hibernate.connection.username">postgres</property>
         <property name="hibernate.connection.password">11111</property>
 
@@ -16,9 +16,13 @@
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.format_sql">true</property>
 
-        <mapping class="com.example.sportcenter.Client"/>
-        <mapping class="com.example.sportcenter.PremiumClient"/>
-        <mapping class="com.example.sportcenter.Room"/>
-        <mapping class="com.example.sportcenter.SmallRoom"/>
+        <mapping class="org.example.entity.Client"/>
+        <mapping class="org.example.entity.PremiumClient"/>
+        <mapping class="org.example.entity.Room"/>
+        <mapping class="org.example.entity.SmallRoom"/>
+        <mapping class="org.example.entity.ServiceEntity"/>
+        <mapping class="org.example.entity.Visit"/>
+        <mapping class="org.example.entity.Record"/>
+        <mapping class="org.example.entity.Visitor"/>
     </session-factory>
 </hibernate-configuration>
