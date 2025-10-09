@@ -1,14 +1,20 @@
 package org.example;
 
 import org.example.entity.*;
+import org.example.entity.Record;
+import org.example.service.RecordService;
+import org.example.service.RoomService;
 import org.example.service.VisitorService;
 import org.example.service.EmployeeService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+
         VisitorService visitorService = new VisitorService();
         EmployeeService employeeService = new EmployeeService();
 
@@ -46,5 +52,32 @@ public class Main {
         employeeService.getAllEmployees().forEach(e ->
                 System.out.println(e.getFirstName() + " - " + e.getPosition())
         );
+
+        RoomService roomService = new RoomService();
+        RecordService recordService = new RecordService();
+
+        Room room = new Room();
+        room.setName("Тренажёрный зал");
+        roomService.add(room);
+
+
+        List<Room> allRooms = roomService.getAll();
+        allRooms.forEach(r -> System.out.println(r.getName()));
+
+        // Каскадное удаление
+        roomService.delete(1L);
+        System.out.println("Room deleted");
+
+        Record record = new Record();
+        record.setClient(visitor);
+        record.setRoom(room);
+        record.setDate(LocalDate.now());
+        record.setTime(LocalTime.of(10, 30));
+        recordService.add(record);
+
+        Room room1 = roomService.getById(1L);
+        roomService.delete(room1.getId());
+
+        System.out.println("Room and all records deleted success");
     }
 }
