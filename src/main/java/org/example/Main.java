@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.entity.*;
 import org.example.entity.Record;
+import org.example.repository.*;
 import org.example.service.RecordService;
 import org.example.service.RoomService;
 import org.example.service.VisitorService;
@@ -86,5 +87,17 @@ public class Main {
         Room room1 = roomService.getById(1L);
         roomService.delete(room1.getId());
         System.out.println("Room and all records deleted success");
+
+        EmployeeRepository employeeRepository = new EmployeeRepository();
+        ServiceRepository serviceRepository = new ServiceRepository();
+        RoomRepository roomRepository = new RoomRepository();
+        UserRepository userRepository = new UserRepository();
+        VisitorRepository visitorRepository = new VisitorRepository();
+
+        System.out.println(employeeRepository.getAllByCriteria());
+        System.out.println(serviceRepository.getActivityWithMinPrice());
+        System.out.println("Total capacity: " + roomRepository.getTotalCapacity());
+        System.out.println(userRepository.findByAgeRange(20, 40));
+        System.out.println(visitorRepository.findRoomsVisitedByOlderGuests(10));
     }
 }
