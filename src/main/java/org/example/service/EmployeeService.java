@@ -3,6 +3,8 @@ package org.example.service;
 import org.example.entity.Employee;
 import org.example.repository.EmployeeRepository;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 public class EmployeeService {
@@ -23,5 +25,17 @@ public class EmployeeService {
 
     public void removeEmployee(Long id) {
         repository.delete(id);
+    }
+
+    public Employee getHighestPaidEmployee() {
+        return repository.getHighestPaidEmployee();
+    }
+
+    public Employee getLowestPaidEmployee() {
+        return repository.getLowestPaidEmployee();
+    }
+
+    public BigDecimal calculateTotalSalaryExpenses(LocalDate start, LocalDate end) {
+        return repository.calculateTotalSalaryExpenses(start, end);
     }
 }

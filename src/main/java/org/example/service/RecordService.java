@@ -22,18 +22,12 @@ public class RecordService {
     public List<Record> getAll() {
         try (Session session = HibernateConnection.getSessionFactory().openSession()) {
             return session.createQuery("from Record", Record.class).list();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return List.of();
         }
     }
 
     public Record getById(Long id) {
         try (Session session = HibernateConnection.getSessionFactory().openSession()) {
             return session.get(Record.class, id);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
         }
     }
 
@@ -62,10 +56,9 @@ public class RecordService {
 
     public List<Record> getByClientId(Long clientId) {
         try (Session session = HibernateConnection.getSessionFactory().openSession()) {
-            return session.createQuery(
-                    "from Record r where r.client.id = :clientId",
-                    Record.class
-            ).setParameter("clientId", clientId).list();
+            return session.createQuery("from Record r where r.client.id = :clientId", Record.class)
+                    .setParameter("clientId", clientId)
+                    .list();
         } catch (Exception e) {
             e.printStackTrace();
             return List.of();
@@ -74,10 +67,9 @@ public class RecordService {
 
     public List<Record> getByRoomId(Long roomId) {
         try (Session session = HibernateConnection.getSessionFactory().openSession()) {
-            return session.createQuery(
-                    "from Record r where r.room.id = :roomId",
-                    Record.class
-            ).setParameter("roomId", roomId).list();
+            return session.createQuery("from Record r where r.room.id = :roomId", Record.class)
+                    .setParameter("roomId", roomId)
+                    .list();
         } catch (Exception e) {
             e.printStackTrace();
             return List.of();

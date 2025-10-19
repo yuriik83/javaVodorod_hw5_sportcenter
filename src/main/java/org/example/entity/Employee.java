@@ -2,6 +2,8 @@ package org.example.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -16,4 +18,7 @@ public class Employee extends User {
     private LocalDate fireDate;
     private String position;
     private double monthlySalary;
+
+    @Column(name = "salary", precision = 10, scale = 2)
+    private BigDecimal salary;
 }

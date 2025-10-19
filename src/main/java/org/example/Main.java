@@ -7,6 +7,7 @@ import org.example.service.RoomService;
 import org.example.service.VisitorService;
 import org.example.service.EmployeeService;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -75,9 +76,15 @@ public class Main {
         record.setTime(LocalTime.of(10, 30));
         recordService.add(record);
 
+        BigDecimal totalExpenses = employeeService.calculateTotalSalaryExpenses(
+                LocalDate.of(2025, 1, 1),
+                LocalDate.of(2025, 12, 31)
+        );
+
+        System.out.println("Общие расходы на персонал за 2025 год: " + totalExpenses + " BYN");
+
         Room room1 = roomService.getById(1L);
         roomService.delete(room1.getId());
-
         System.out.println("Room and all records deleted success");
     }
 }
