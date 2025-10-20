@@ -5,6 +5,7 @@ import org.example.entity.Room;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class RoomService {
@@ -59,5 +60,16 @@ public class RoomService {
             e.printStackTrace();
         }
     }
+
+    public BigDecimal getCostPerHourPerPerson(Long roomId) {
+        Room room = getById(roomId);
+        if (room == null) return BigDecimal.ZERO;
+        int capacity = room.getCapacity();
+        if (capacity <= 0) return BigDecimal.ZERO;
+
+        BigDecimal rent = BigDecimal.valueOf(room.getRentPrice());
+        return rent.divide(BigDecimal.valueOf(capacity), 2, BigDecimal.ROUND_HALF_UP);
+    }
+
 }
 

@@ -45,4 +45,15 @@ public class ClientService {
         em.getTransaction().commit();
         em.close();
     }
+
+    public List<Client> findClientByName(String name) {
+        EntityManager em = emf.createEntityManager();
+        List<Client> clients = em.createQuery(
+                        "SELECT c FROM Client c WHERE LOWER(c.name) LIKE LOWER(:name)", Client.class)
+                .setParameter("name", "%" + name + "%")
+                .getResultList();
+        em.close();
+        return clients;
+    }
+
 }
