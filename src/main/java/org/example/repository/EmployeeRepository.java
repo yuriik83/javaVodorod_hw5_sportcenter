@@ -2,6 +2,9 @@ package org.example.repository;
 
 import config.HibernateConnection;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import org.example.entity.Employee;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -94,6 +97,17 @@ public class EmployeeRepository {
             }
 
             return total;
+        }
+    }
+
+    public List<Employee> getAllByCriteria() {
+        try (Session session = sessionFactory.openSession()) {
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<Employee> cq = cb.createQuery(Employee.class);
+            Root<Employee> root = cq.from(Employee.class);
+            cq.select(root);
+
+            return session.createQuery(cq).getResultList();
         }
     }
 
