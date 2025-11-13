@@ -26,6 +26,8 @@
             org.ehcache.jsr107.EhcacheCachingProvider
         </property>
 
+        <property name="hibernate.javax.cache.uri">classpath:ehcache.xml</property>
+
         <mapping class="org.example.entity.Client"/>
         <mapping class="org.example.entity.PremiumClient"/>
         <mapping class="org.example.entity.Room"/>
@@ -34,5 +36,6 @@
         <mapping class="org.example.entity.Visit"/>
         <mapping class="org.example.entity.Record"/>
         <mapping class="org.example.entity.Visitor"/>
+
     </session-factory>
 </hibernate-configuration>
